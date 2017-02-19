@@ -16,7 +16,7 @@
       var metaEl = document.querySelector('meta[name="viewport"]');
       // 无需缩放，避免模糊
       metaEl.setAttribute('content', 'initial-scale=' + scale + ',maximum-scale=' + scale + ', minimum-scale=' + scale + ',user-scalable=no');
-      // 设置跟字体大小
+      // 设置根字体大小
       function setRootSize() {
         var rootWidth = docEl.offsetWidth;
         // 将设计图分成10等份
