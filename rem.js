@@ -57,7 +57,9 @@
           var currentTestWidth = remTestNode.offsetWidth;
           var rootFontSize = docEl.style.fontSize.replace(/px/, '') * 100;
           var scale = currentTestWidth / rootFontSize;
-          docEl.style.fontSize = rootFontSize / 100 / scale;
+          rootFontSize = rootFontSize / 100 / scale;
+          window.rootFontSize = rootFontSize;
+          docEl.style.fontSize = rootFontSize + 'px';
         });
       };
 
