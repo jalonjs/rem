@@ -16,6 +16,7 @@
       var metaEl = document.querySelector('meta[name="viewport"]');
       // 无需缩放，避免模糊
       metaEl.setAttribute('content', 'initial-scale=' + scale + ',maximum-scale=' + scale + ', minimum-scale=' + scale + ',user-scalable=no');
+      
       // 设置根字体大小
       function setRootSize() {
         var rootWidth = docEl.offsetWidth;
@@ -26,6 +27,28 @@
         // 防止部分手机rem换算bug，需要打个补丁，检测修复一下
         remPatch();
       }
+
+      // 检测rem比，并调整
+      function remPatch() {
+        var remTestFragment = document.createElement("div");
+        remTestFragment.id = 'rem-test';
+        remTestFragment.style.width = '10rem';
+        remTestFragment.style.boxSizing = 'border-box';
+        remTestFragment.style.opacity = 0;
+        remTestFragment.style.position = 'absolute';
+        remTestFragment.style.bottom = '-1000px';
+        setTimeout(function () {
+          document.body.appendChild(remTestFragment);
+          var remTestNode = document.getElementById('rem-test');
+          var currentTestWidth = remTestNode.offsetWidth;
+          var rootFontSize = docEl.style.fontSize.replace(/px/, '') * 100;
+          var scale = currentTestWidth*10 / rootFontSize;
+          rootFontSize = rootFontSize / 100 / scale;
+          window.rootFontSize = rootFontSize;
+          docEl.style.fontSize = rootFontSize + 'px';
+          remTestNode.parentNode.removeChild(remTestNode);
+        })
+      };
 
       var delay;
       function onResize() {
@@ -40,28 +63,5 @@
       window.px2rem = function (designPx) {
         return designPx / dpr / rootFontSize;
       }
-
-      // 检测rem比，并调整
-      var remTestNode;
-      function remPatch() {
-        var remTestFragment = document.createElement("div");
-        remTestFragment.id = 'rem-test';
-        remTestFragment.style.width = '10rem';
-        remTestFragment.style.boxSizing = 'border-box';
-        remTestFragment.style.opacity = 0;
-        remTestFragment.style.position = 'absolute';
-        remTestFragment.style.bottom = '-1000px';
-        setTimeout(function () {
-          document.body.appendChild(remTestFragment);
-          remTestNode = document.getElementById('rem-test');
-          var currentTestWidth = remTestNode.offsetWidth;
-          var rootFontSize = docEl.style.fontSize.replace(/px/, '') * 100;
-          var scale = currentTestWidth*10 / rootFontSize;
-          rootFontSize = rootFontSize / 100 / scale;
-          window.rootFontSize = rootFontSize;
-          docEl.style.fontSize = rootFontSize + 'px';
-          remTestNode.parentNode.removeChild(remTestNode);
-        })
-      };
 
     })();
