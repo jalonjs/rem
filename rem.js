@@ -1,4 +1,4 @@
-/**
+    /**
      * 此js负责初始化或重置根节点的字体大小，默认为屏幕css宽度大小的10分之一，并通过检测rem比，来解决部分手机换算bug。
      * rem对应值得计算方式为: designPx/dpr/rootFontSize
      * 即如过设计师给的iphone6的设计图:
@@ -44,23 +44,24 @@
       // 检测rem比，并调整
       var remTestNode;
       function remPatch() {
-        if (remTestNode) {
-          remTestNode.parentNode.removeChild(remTestNode);
-        }
         var remTestFragment = document.createElement("div");
         remTestFragment.id = 'rem-test';
-        remTestFragment.style = 'width: 100rem; box-sizing: border-box; opacity: 0; position: absolute; bottom: -1000px';
-        // 让dom先加载完
+        remTestFragment.style.width = '10rem';
+        remTestFragment.style.boxSizing = 'border-box';
+        remTestFragment.style.opacity = 0;
+        remTestFragment.style.position = 'absolute';
+        remTestFragment.style.bottom = '-1000px';
         setTimeout(function () {
           document.body.appendChild(remTestFragment);
           remTestNode = document.getElementById('rem-test');
           var currentTestWidth = remTestNode.offsetWidth;
           var rootFontSize = docEl.style.fontSize.replace(/px/, '') * 100;
-          var scale = currentTestWidth / rootFontSize;
+          var scale = currentTestWidth*10 / rootFontSize;
           rootFontSize = rootFontSize / 100 / scale;
           window.rootFontSize = rootFontSize;
           docEl.style.fontSize = rootFontSize + 'px';
-        });
+          remTestNode.parentNode.removeChild(remTestNode);
+        })
       };
 
     })();
